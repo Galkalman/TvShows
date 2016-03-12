@@ -256,7 +256,21 @@ class Forms
         $template = '<div>
                         <form action="./InsertEpisodes" method="post">
                             <table id="FormTable">
-                                <caption><h1></h1></caption>';
+                                <caption><h1></h1></caption>
+                                <tr>
+                                    <td class="FormTableTd">
+                                        Episode Number
+                                    </td>
+                                    <td class="FormTableTd">
+                                        Title
+                                    </td>
+                                    <td class="FormTableTd">
+                                        Air Date
+                                    </td>
+                                    <td class="FormTableTd">
+                                        Watched
+                                    </td>
+                                </tr>';
 
         $seasonTable = $showKey . "S" . str_pad($seasonNum, 2, "0", STR_PAD_LEFT);
         $episodesAlreadyInTable = $this->DB->lineCount($seasonTable);
@@ -270,44 +284,25 @@ class Forms
 
         for ($i = 1; $i <= $noEpisodes; $i++) {
             $template .= '<tr>
-                            <td colspan="2" class="FormTableTd">
-                                <h2>' . $seasonTable . 'E' . str_pad(($i + $episodesAlreadyInTable), 2, "0", STR_PAD_LEFT) . ':</h2>
-                            </td>
-                        </tr>
-                        <tr>
                             <td class="FormTableTd">
-                                <input type="hidden" value="' . ($i + $lastSeasonOverAll) . '" name="OverAll' . ($i + $episodesAlreadyInTable) . '">
-                            </td>
-                        </tr>
-                        <tr>
-                            <td class="FormTableTd">
-                                <input type="hidden" value="' . ($i + $episodesAlreadyInTable) . '" name="EpisodeNo' . ($i + $episodesAlreadyInTable) . '">
-                            </td>
-                        </tr>
-                        <tr>
-                            <td class="FormTableTd">
-                                Episode Title:
+                                ' . $seasonTable . 'E' . str_pad(($i + $episodesAlreadyInTable), 2, "0", STR_PAD_LEFT) . '
                             </td>
                             <td class="FormTableTd">
                                 <input type="text" name="Title' . ($i + $episodesAlreadyInTable) . '" value="TBA">
                             </td>
-                        </tr>
-                        <tr>
-                            <td class="FormTableTd">
-                                Episode Date:
-                            </td>
                             <td class="FormTableTd">
                                 <input type="text" name="Date' . ($i + $episodesAlreadyInTable) . '" value="TBA">
-                            </td>
-                        </tr>
-                        <tr>
-                            <td class="FormTableTd">
-                                Watched:
                             </td>
                             <td class="FormTableTd">
                                 <input type="radio" name="Watched' . ($i + $episodesAlreadyInTable) . '" value="0" checked> Unwatched
                                 <input type="radio" name="Watched' . ($i + $episodesAlreadyInTable) . '" value="1"> Watched
                             </td>
+                            <td class="FormTableTd">
+                            </td>
+                            <td class="FormTableTd">
+                            </td>
+                            <input type="hidden" value="' . ($i + $episodesAlreadyInTable) . '" name="EpisodeNo' . ($i + $episodesAlreadyInTable) . '">
+                            <input type="hidden" value="' . ($i + $lastSeasonOverAll) . '" name="OverAll' . ($i + $episodesAlreadyInTable) . '">
                         </tr>';
         }
 
