@@ -86,15 +86,24 @@ class Forms
 
     public function NumberOfSeasonsToAdd($error)
     {
+        $allShows = $this->DB->select("tvShows");
+
         $template = '<div>
-                        <form action="./AddSeason" method="post">
+                        <form action="./AddSeason" method="post" id="AddSeasonsForm">
                             <table id="FormTable">
                                 <tr>
                                     <td class="FormTableTd">
                                         <h4> Show Title </h4>
                                     </td>
                                     <td class="FormTableTd">
-                                        <input type="text" name="titleToAddSeasonsTo">
+                                        <select name="titleToAddSeasonsTo" form="AddSeasonsForm" required>';
+
+        for ($i = 0; $i < count($allShows); $i++)
+        {
+            $template .= '<option value="' . $allShows[$i]["ShowKey"] . '">' . $allShows[$i]["Title"]  . '</option>';
+        }
+
+        $template .= '                </select>
                                     </td>
                                 </tr>
                                 <tr>
@@ -189,41 +198,50 @@ class Forms
 
     public function NumberOfEpisodesToAdd($error)
     {
+        $allShows = $this->DB->select("tvShows");
+
         $template = '<div>
-                        <form action="./InsertEpisodes" method="post">
+                        <form action="./InsertEpisodes" method="post" id="AddEpisodesForm">
                             <table id="FormTable">
                                 <tr>
                                     <td class="FormTableTd">
                                         <h4> Show Title </h4>
                                     </td>
                                     <td class="FormTableTd">
-                                        <input type="text" name="titleToAddEpisodesTo">
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td class="FormTableTd">
-                                        <h4> Season Number </h4>
-                                    </td>
-                                    <td class="FormTableTd">
-                                        <input type="text" name="seasonToAddEpisodesTo">
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td class="FormTableTd">
-                                        <h4> How many episodes would you like to add? </h4>
-                                    </td>
-                                    <td class="FormTableTd">
-                                        <input type="text" name="noEpisodesToAdd">
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td colspan="2" class="FormTableTd" id="SubmitForm">
-                                        <input type="submit" value="Add Episodes" name="NumberOfEpisodesToAdd">
-                                    </td>
-                                </tr>
-                            </table>
-                        </form>
-                     </div>';
+                                        <select name="showToAddEpisodesTo" form="AddEpisodesForm" required>';
+
+        for ($i = 0; $i < count($allShows); $i++)
+        {
+            $template .= '<option value="' . $allShows[$i]["ShowKey"] . '">' . $allShows[$i]["Title"]  . '</option>';
+        }
+
+        $template .= '            </select>
+                             </td>
+                        </tr>
+                        <tr>
+                            <td class="FormTableTd">
+                                <h4> Season Number </h4>
+                            </td>
+                            <td class="FormTableTd">
+                                <input type="text" name="seasonToAddEpisodesTo">
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="FormTableTd">
+                                <h4> How many episodes would you like to add? </h4>
+                            </td>
+                            <td class="FormTableTd">
+                                <input type="text" name="noEpisodesToAdd">
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="2" class="FormTableTd" id="SubmitForm">
+                                <input type="submit" value="Add Episodes" name="NumberOfEpisodesToAdd">
+                            </td>
+                        </tr>
+                    </table>
+                </form>
+             </div>';
 
         if ($error != "")
         {
@@ -243,32 +261,14 @@ class Forms
         $seasonTable = $showKey . "S" . str_pad($seasonNum, 2, "0", STR_PAD_LEFT);
         $episodesAlreadyInTable = $this->DB->lineCount($seasonTable);
 
-        # TODO: Add a fix.
-        if ($seasonNum > 1 and $episodesAlreadyInTable == 0)
-        {
-            $lastSeasonTable = $showKey . "S" . str_pad(($seasonNum - 1), 2, "0", STR_PAD_LEFT);
-            $lastSeasonOverAll = $this->DB->getOverAllNumber($lastSeasonTable);
-        }
-        elseif ($seasonNum > 1 and $episodesAlreadyInTable != 0)
-        {
-            $lastSeasonOverAll = $this->DB->getOverAllNumber($seasonTable);
-        }
-        elseif ($seasonNum == 1 and $episodesAlreadyInTable !=0)
-        {
-            $lastSeasonOverAll = $this->DB->getOverAllNumber($seasonTable);
-        }
-        elseif ($seasonNum == 1 and $episodesAlreadyInTable == 0)
-        {
-            $lastSeasonOverAll = 0;
-        }
+        $lastSeasonOverAll = $this->getOverAll($seasonNum, $seasonTable, $episodesAlreadyInTable, $showKey);
 
         $res = $this->DB->select($showKey, array("SeasonNo"=>$seasonNum));
 
         if(($episodesAlreadyInTable + $noEpisodes) > $res[0]["NoEpisodes"])
-            return $this->errorHandler("The number of episodes exceed the number of episodes in this season.");
+            return $this->NumberOfEpisodesToAdd("The number of episodes exceed the number of episodes in this season.");
 
         for ($i = 1; $i <= $noEpisodes; $i++) {
-            # TODO: Add fixes from page.
             $template .= '<tr>
                             <td colspan="2" class="FormTableTd">
                                 <h2>' . $seasonTable . 'E' . str_pad(($i + $episodesAlreadyInTable), 2, "0", STR_PAD_LEFT) . ':</h2>
@@ -335,21 +335,7 @@ class Forms
 
         if (isset($_POST['NumberOfSeasonsToAdd']))
         {
-            $res = $this->DB->select('tvShows', array('Title'=>$_POST['titleToAddSeasonsTo']));
-
-            if (count($res)) {
-                $showKey = $res[0]['ShowKey'];
-                $res2 = $this->DB->select($showKey);
-                if ($res2 == "Nothing found.")
-                {
-                    return $this->CreateSeriesForm("This show doesn't exist, Please add it first.");
-                }
-            }
-            else{
-                return $this->CreateSeriesForm("This show doesn't exist, Please add it first.");
-            }
-
-            return $this->AddSeasonsForm(intval($_POST['seasonsToAdd']), $showKey) . $error;
+            return $this->AddSeasonsForm(intval($_POST['seasonsToAdd']), $_POST['titleToAddSeasonsTo']) . $error;
         }
 
         elseif (isset($_POST['createSeries']))
@@ -370,27 +356,19 @@ class Forms
         $error = $this->errorHandler($alert);
 
         if (isset($_POST['AddEpisodes'])) {
-            return $this->CreateSeries->AddEpisodeToSeasonTable($_POST['showKey'], intval($_POST['seasonNumberToAddTo']), intval($_POST['numberOfEpisodes']));
-            #header("Location: /tvShows");
+            $this->CreateSeries->AddEpisodeToSeasonTable($_POST['showKey'], intval($_POST['seasonNumberToAddTo']), intval($_POST['numberOfEpisodes']));
+            header("Location: /tvShows");
         }
 
-        if (isset($_POST['NumberOfEpisodesToAdd']))
-        {
-            $res = $this->DB->select('tvShows', array('Title' => $_POST['titleToAddEpisodesTo']));
+        if (isset($_POST['NumberOfEpisodesToAdd'])) {
+            $res = $this->DB->select('tvShows', array('ShowKey' => $_POST['showToAddEpisodesTo']));
 
-            if (count($res)) {
-                $showKey = $res[0]['ShowKey'];
-                $res2 = $this->DB->select($showKey, array("SeasonNo" => $_POST['seasonToAddEpisodesTo']));
-                if ($res2 == "Nothing found.")
-                {
-                    return $this->NumberOfSeasonsToAdd("This season doesn't exist, Please add it first.");
-                }
+            if ($res[0]["NoSeasons"] < intval($_POST['seasonToAddEpisodesTo'])) {
+                return $this->NumberOfSeasonsToAdd("This season doesn't exist, Please add it first.");
             }
-            else{
-                return $this->CreateSeriesForm("This show doesn't exist, Please add it first.");
+            else {
+                return $this->AddEpisodesForm($_POST['showToAddEpisodesTo'], intval($_POST['seasonToAddEpisodesTo']), intval($_POST['noEpisodesToAdd'])) . $error;
             }
-
-            return $this->AddEpisodesForm($showKey, intval($_POST['seasonToAddEpisodesTo']), intval($_POST['noEpisodesToAdd'])) . $error;
         }
 
         else
@@ -417,5 +395,30 @@ class Forms
         }
 
         return $error;
+    }
+
+    private function getOverAll($seasonNum, $seasonTable, $episodesAlreadyInTable, $showKey)
+    {
+        $lastSeasonOverAll = 0;
+
+        if ($seasonNum > 1 and $episodesAlreadyInTable == 0)
+        {
+            $lastSeasonTable = $showKey . "S" . str_pad(($seasonNum - 1), 2, "0", STR_PAD_LEFT);
+            $lastSeasonOverAll = $this->DB->getOverAllNumber($lastSeasonTable);
+        }
+        elseif ($seasonNum > 1 and $episodesAlreadyInTable != 0)
+        {
+            $lastSeasonOverAll = $this->DB->getOverAllNumber($seasonTable);
+        }
+        elseif ($seasonNum == 1 and $episodesAlreadyInTable !=0)
+        {
+            $lastSeasonOverAll = $this->DB->getOverAllNumber($seasonTable);
+        }
+        elseif ($seasonNum == 1 and $episodesAlreadyInTable == 0)
+        {
+            $lastSeasonOverAll = 0;
+        }
+
+        return $lastSeasonOverAll;
     }
 }

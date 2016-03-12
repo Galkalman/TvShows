@@ -170,9 +170,16 @@ class DB
         foreach ($params as $key => $value)
         {
             $keys .= "`" . $key . "`," ;
-            $values .= "'" . $value . "',";
+            if ($key != "Watched") {
+                $values .= "'" . $value . "',";
+            }
+            else {
+                $values .= intval($value) . ",";
+            }
         }
+
         $query .= substr($keys, 0, -1) . ") VALUES (" . substr($values, 0, -1) . ")";
+
         try{
             $res = $this->execute($query);
             return $res;

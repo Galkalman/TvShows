@@ -83,12 +83,25 @@ class CreateTvShow
                           "DateFinished" => $_POST["DateFinished" . $i]);
             $res = $this->DB->insert($showKey, $info);
             $this->AddSeasonTable($showKey, $noSeasons, ($noSeasonsOfShow + 1));
+            # TODO: Add an update to the tvShows table, update the NoSeasons of the show to the new number of seasons.
         }
     }
 
     # TODO: Add a function that will allow me to add episodes to a certain season of a show.
     public function AddEpisodeToSeasonTable($showKey, $seasonNum, $noEpisodes)
     {
-        print_r($_POST);
+        $seasonTable = $showKey . "S" . str_pad($seasonNum, 2, "0", STR_PAD_LEFT);
+
+        $noEpisodesOfSeason = $this->DB->lineCount($seasonTable);
+
+        for ($i = $noEpisodesOfSeason + 1; $i <= $noEpisodes + $noEpisodesOfSeason; $i++)
+        {
+            $info = array("OverAll" => $_POST["OverAll" . $i],
+                "EpisodeNo" => $_POST["EpisodeNo" . $i],
+                "Title" => $_POST["Title" . $i],
+                "Date" => $_POST["Date" . $i],
+                "Watched" => $_POST["Watched" . $i]);
+            $res = $this->DB->insert($seasonTable, $info);
+        }
     }
 }
