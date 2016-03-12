@@ -1,0 +1,150 @@
+/* Simple Headers*/
+
+table{
+    border: 2px solid black;
+    border-collapse: collapse;
+    width: 100%;
+}
+
+th, td{
+    border: 1px solid black;
+    border-collapse: collapse;
+    padding: 10px;
+}
+
+/* Header Classes*/
+
+.HeaderText{
+    color: white;
+    position: fixed;
+    top: -0.75%;
+}
+
+/* Content Classes*/
+
+.Error{
+    color: red;
+    font-weight: bold;
+}
+
+.Success{
+    color: green;
+    font-weight: bold;
+}
+
+/* Footer Classes*/
+
+.FooterText{
+    color: white;
+    position: fixed;
+    bottom: -1.75%;
+    left: 40%;
+}
+
+/* Table Classes*/
+
+.CenterAlignTd{
+    text-align: center;
+}
+
+.LeftAlignTd{
+    text-align: left;
+}
+
+.FormTableTd{
+    border: 0px;
+    padding: 3px;
+}
+
+/* Header ID's*/
+
+#Header{
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 7.5%;
+    background-color: rgba(0, 0, 0, 0.8);
+}
+
+#Logo{
+    background-image: url("./Logo.png");
+    left:0.5%;
+    height: 50px;
+    width: 40px;
+    top: 0;
+    position: fixed;
+}
+
+#TestHeader{
+    right: 10%;
+    color: rgb(237,67,55);
+}
+
+#TvShowsHeader{
+    left: 10%;
+}
+
+#AddSeasons{
+    left: 20%;
+}
+
+#AddEpisodes{
+    left: 30%;
+}
+
+/* Content ID's*/
+
+#Content{
+    top: 10%;
+    position: absolute;
+    left: 5%;
+    width: 90%;
+}
+
+/* Footer ID's*/
+
+#Footer
+{
+    bottom: 0;
+    position: fixed;
+    left: 0;
+    width: 100%;
+    height: 3.5%;
+    background-color: rgba(0, 0, 0, 0.8);
+}
+
+/*
+#Form{
+    top: 60%;
+    position: absolute;
+    left: 10%;
+}
+*/
+
+/* Table ID's*/
+
+#HeadLine{
+    text-align: left;
+}
+
+#FormTable{
+    border: 0px;
+    position: inherit;
+    left: 35%;
+    top: 25%;
+    width: 50%;
+}
+
+#SubmitForm{
+    padding-left: 20%;
+    padding-top: 5%;
+}
+
+#WatchedRow{
+    background-color: limegreen;
+}
+
+#UnwatchedRow{
+    background-color: rgb(237,67,55);
+}
