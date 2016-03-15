@@ -51,15 +51,25 @@ class DB
     /**
      * @param $tblName -> The table name to select from
      * @param array $params
+     * @param $colToSelect -> The column name to receive while querying the table
      * @return array -> All lines from $tblName
      */
-    public function select($tblName, $params=array(0=>0))
+    public function select($tblName, $params=array(0=>0), $colToSelect='*')
     {
-        $query = "SELECT * FROM `" . $tblName . "` WHERE ";
+        $query = "SELECT " . $colToSelect . " FROM " . $tblName . " WHERE ";
         foreach ($params as $key => $value)
         {
-            $query .= $key . '="' . $value . '" ';
+            if ($key != "Watched") {
+                $query .= $key . '="' . $value . '" and ';
+            }
+            else {
+                $query .= $key . '=' . intval($value) . ' and ';
+            }
         }
+
+        # Will remove the redundant " and "
+        $query = substr($query, 0, -5);
+
         try {
             $res = $this->execute($query);
         }
@@ -191,9 +201,42 @@ class DB
     }
 
     # TODO: Crete the update function
-    public function update()
+    public function update($tblName, $colToUpdate, $valToUpdate, $params=array(0=>0))
     {
-        pass;
+        # UPDATE `tvShows` SET `NoSeasons`='2'
+        $query = "UPDATE `" . $tblName . "` SET `" . $colToUpdate . "`=";
+
+        if ($valToUpdate != "Watched") {
+            $query .= "'" . $valToUpdate . "'";
+        }
+        else {
+            $query .= intval($valToUpdate);
+        }
+
+        $query .= " WHERE ";
+
+        foreach ($params as $key => $value)
+        {
+            $query .= "`" . $key . "`=" ;
+            if ($key != "Watched") {
+                $query .= "'" . $value . "' and ";
+            }
+            else {
+                $query .= intval($value) . " and ";
+            }
+        }
+
+        # Will remove the redundant " and "
+        $query = substr($query, 0, -5);
+
+        try{
+            $res = $this->execute($query);
+            return $res;
+        }
+        catch (Exception $e){
+            $this->error = "Something went wrong...";
+            return $this->error;
+        }
     }
 
     # TODO: Create the drop function

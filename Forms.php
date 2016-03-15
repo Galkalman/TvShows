@@ -3,6 +3,7 @@
 require_once("Constants.php");
 require_once("DB.php");
 require_once("CreateSeries.php");
+require_once("editTables.php");
 
 class Forms
 {
@@ -12,6 +13,7 @@ class Forms
     {
         $this->DB = $db;
         $this->CreateSeries = new CreateTvShow($this->DB);
+        $this->EditTable = new EditTable($this->DB);
     }
 
     public function CreateSeriesForm($alert)
@@ -319,6 +321,42 @@ class Forms
         return $template;
     }
 
+    public function editTable()
+    {
+        $allShows = $this->DB->select("INFORMATION_SCHEMA.TABLES", array("TABLE_SCHEMA"=>"TVShowsSite"), "TABLE_NAME");
+
+        $template = '<div>
+                        <form action="./EditTables" method="post" id="EditTablesForm">
+                            <table id="FormTable">
+                                <tr>
+                                    <td class="FormTableTd">
+                                        <h4> Table Name </h4>
+                                    </td>
+                                    <td class="FormTableTd">
+                                        <select name="tableToEdit" form="EditTablesForm" required>';
+
+        for ($i = 0; $i < count($allShows); $i++)
+        {
+            if ($allShows[$i]["TABLE_NAME"] != "Users") {
+                $template .= '<option value="' . $allShows[$i]["TABLE_NAME"] . '">' . $allShows[$i]["TABLE_NAME"] . '</option>';
+            }
+        }
+
+        $template .= '                </select>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td colspan="2" class="FormTableTd" id="SubmitForm">
+                                        <input type="submit" value="Edit Table" name="editTable">
+                                    </td>
+                                </tr>
+                            </table>
+                        </form>
+                     </div>';
+
+        return $template;
+    }
+
     public function seasonsHandler($alert)
     {
         $error = $this->errorHandler($alert);
@@ -369,6 +407,23 @@ class Forms
         else
         {
             return $this->NumberOfEpisodesToAdd($error);
+        }
+    }
+
+    public function editorHandler()
+    {
+        if (isset($_POST["sendEditedTable"]))
+        {
+            return "Need to do the update to table";
+        }
+
+        if (isset($_POST["editTable"]))
+        {
+            return $this->EditTable->ShowTableToEdit($_POST["tableToEdit"]);
+        }
+
+        else {
+            return $this->editTable();
         }
     }
 

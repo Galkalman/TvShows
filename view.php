@@ -55,6 +55,9 @@ switch($routing){
     case URI_INSERT_EPISODES:
         $output = $form->episodeHandler($createSeries->alert);
         break;
+    case URI_EDIT_TABLES:
+        $output = $form->editorHandler();
+        break;
     default:
         $output = "Create homepage";
 }

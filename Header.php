@@ -19,6 +19,9 @@ class Header
                 </a>
                 <a href="' . URI_INSERT_EPISODES . '" class="HeaderText">
                     <h2 class="HeaderText" id="AddEpisodes"> Insert Episodes </h2>
+                </a>
+                <a href="' . URI_EDIT_TABLES . '" class="HeaderText">
+                    <h2 class="HeaderText" id="EditTables"> Edit Tables </h2>
                 </a>';
     }
 

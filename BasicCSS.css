@@ -93,6 +93,10 @@ th, td{
     left: 30%;
 }
 
+#EditTables{
+    left: 42.5%;
+}
+
 /* Content ID's*/
 
 #Content{
@@ -147,4 +151,10 @@ th, td{
 
 #UnwatchedRow{
     background-color: rgb(237,67,55);
+}
+
+/* Form ID's */
+
+#editTableInput{
+    text-align: center;
 }
