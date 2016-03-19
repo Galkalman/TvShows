@@ -18,7 +18,8 @@ class EditTable
 
         $tableCols = $this->DB->select("INFORMATION_SCHEMA.COLUMNS", array("TABLE_SCHEMA"=>"TVShowsSite", "TABLE_NAME"=>$tblName), "COLUMN_NAME");
 
-        #print_r($tableCols[$i][0]);
+        $tableType = $this->findTableType($tblName);
+
         $template = '<div>
                         <form action="./EditTables" method="post" id="EditingTable">
                             <table id="FormTable">
@@ -36,7 +37,7 @@ class EditTable
             $template .= '<tr>';
 
             for ($colValue = 0; $colValue < (count($res[$row])/2); $colValue++) {
-                $template .= '<td class="FormTableTd"><input id="editTableInput" type="text" value="' . $res[$row][$colValue] . '" name="row' . $row . 'col' . $colValue . '"></td>';
+                $template .= $this->getColumnValue();
             }
 
             $template .= '</tr>';
@@ -53,4 +54,19 @@ class EditTable
 
         return $template;
     }
+
+    private function findTableType($tblName)
+    {
+        if (preg_match('/S[0-9]{2}/', $tblName)) {
+            return SEASON_TABLE;
+        }
+        elseif ($tblName == "tvShows") {
+            return TVS_TABLE;
+        }
+        else {
+            return SERIES_TABLE;
+        }
+    }
+
+'<td class="FormTableTd"><input id="editTableInput" type="text" value="' . $res[$row][$colValue] . '" name="row' . $row . 'col' . $colValue . '"></td>';
 }

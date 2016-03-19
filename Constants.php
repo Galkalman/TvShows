@@ -38,6 +38,15 @@ define("THE_FLASH", "TheFlash");
 define("WATCHED", 1);
 define("TESTING", "test");
 
+# -------------------- Tables --------------------
+
+define("TVS_TABLE", 1);
+define("SERIES_TABLE", 2);
+define("SEASON_TABLE", 3);
+define("TVS_COLUMNS", array("ShowKey", "Title", "NoSeasons"));
+define("SERIES_COLUMNS", array("SeasonNo"));
+define("SEASON_COLUMNS", array("OverAll", "EpisodeNo"));
+
 # -------------------- Messages --------------------
 
 define("EMPTY_ERROR", "You left something empty...");
