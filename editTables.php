@@ -52,11 +52,13 @@ class EditTable
                      <script type="text/javascript">
                         function changeWatched(name)
                         {
-                            if (document.getElementById(name).value == "Watched") {
+                            if (document.getElementById(name.concat("-")).value == "Watched") {
                                 document.getElementById(name).value = "Unwatched"; // Changes the value of the button "name"
+                                document.getElementById(name.concat("-")).value = "Unwatched";
                             }
                             else {
                                 document.getElementById(name).value = "Watched";
+                                document.getElementById(name.concat("-")).value = "Watched";
                             }
                         }
                      </script>';
@@ -97,13 +99,16 @@ class EditTable
         } else if ($tableType == SEASON_TABLE) {
             if (in_array($colValue, SEASON_COLUMNS, true)) {
                 return '<td class="FormTableTd"><input id="editTableReadonlyInput" type="text" value="' . $res[$row][$colValue] . '" name="row' . $row . 'col' . $colValue . '" readonly></td>';
-            } elseif ($colValue == WATCHED_COLUMN) {
+            }
+            elseif ($colValue == WATCHED_COLUMN) {
                 $watchedInputName = "row" . $row . "col" . $colValue;
                 $watchedValue = $res[$row][$colValue];
                 if ($watchedValue == WATCHED) {
-                    return '<td class="FormTableTd"><input type="button" value="Watched" id="' . $watchedInputName . '" name="' . $watchedInputName . '" onclick="changeWatched(\'' . $watchedInputName . '\');"></td>';
+                    return '<td class="FormTableTd"><input type="button" value="Watched" id="' . $watchedInputName . '-" name="' . $watchedInputName . '-" onclick="changeWatched(\'' . $watchedInputName . '\');"></td>
+                            <input type="hidden" id="' . $watchedInputName . '" name="' . $watchedInputName . '" value="Watched">';
                 } else {
-                    return '<td class="FormTableTd"><input type="button" value="Unwatched" id="' . $watchedInputName . '" name="' . $watchedInputName . '" onclick="changeWatched(\'' . $watchedInputName . '\');"></td>';
+                    return '<td class="FormTableTd"><input type="button" value="Unwatched" id="' . $watchedInputName . '-" name="' . $watchedInputName . '-" onclick="changeWatched(\'' . $watchedInputName . '\');"></td>
+                            <input type="hidden" id="' . $watchedInputName . '" name="' . $watchedInputName . '" value="Unwatched">';
                 }
             } else {
                 return '<td class="FormTableTd"><input id="editTableInput" type="text" value="' . $res[$row][$colValue] . '" name="row' . $row . 'col' . $colValue . '"></td>';
