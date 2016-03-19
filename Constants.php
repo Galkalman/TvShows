@@ -43,9 +43,11 @@ define("TESTING", "test");
 define("TVS_TABLE", 1);
 define("SERIES_TABLE", 2);
 define("SEASON_TABLE", 3);
-define("TVS_COLUMNS", array("ShowKey", "Title", "NoSeasons"));
-define("SERIES_COLUMNS", array("SeasonNo"));
-define("SEASON_COLUMNS", array("OverAll", "EpisodeNo"));
+define("TVS_COLUMNS", array(0, 1, 2));
+define("SERIES_COLUMNS", array(0));
+define("SEASON_COLUMNS", array(0, 1));
+define("STATUS_COLUMN", 3);
+define("WATCHED_COLUMN", 4);
 
 # -------------------- Messages --------------------
 

@@ -14,16 +14,6 @@ class CreateTvShow
 
     public function AddTvShowToMasterTable()
     {
-        $status = RUNNING;
-        if ($_POST['Status'] == '2')
-        {
-            $status = WINTER;
-        }
-        elseif ($_POST['Status'] == '3')
-        {
-            $status = FINISHED;
-        }
-
         if (empty($_POST['Title']) or empty($_POST['ShowKey']) or empty($_POST['NoSeasons']) or empty($_POST['Status']))
         {
             $this->alert = EMPTY_ERROR;

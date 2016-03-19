@@ -158,3 +158,8 @@ th, td{
 #editTableInput{
     text-align: center;
 }
+
+#editTableReadonlyInput{
+    text-align: center;
+    border: 0;
+}
