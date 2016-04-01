@@ -17,6 +17,29 @@ class Tables
             $template .= $this->SeasonEpisodesTable($showName, $i, $fullShowName, $DB);
         }
 
+        $template .= "<script>
+                         $(function () {
+                             $('input').on('click', function (b) {
+                                 var button = $(this);
+                                 var Status = $(this).val();
+                                 var Table = $(b.currentTarget).attr('name');
+                                 var Episode = $(b.currentTarget).attr('id');
+                                 var Class = 'WatchedRow';
+                                 if (Status == 'Watched') {
+                                    Status = 'Unwatched';
+                                    Class = 'UnwatchedRow';
+                                 }
+                                 else {
+                                    Status = 'Watched';
+                                 }
+                                 $.ajax({url: './ajax.php', data: {changeWatched: Status, Table: Table, Episode: Episode}, type: 'post', async: false, success: function(){
+                                     button.val(Status);
+                                     button.removeClass().addClass(Class);
+                                 }});
+                             });
+                         });
+                     </script>";
+
         return $template;
     }
 
@@ -69,22 +92,35 @@ class Tables
                             <th class="CenterAlignTd">Episode</th>
                             <th class="LeftAlignTd">Title</th>
                             <th class="CenterAlignTd">First Aired</th>
+                            <th class="CenterAlignTd">Watched</th>
                         </tr>';
 
         for($k = 0; $k < count($seasonEpisodes); $k++)
         {
-            $bg_color = "WatchedRow";
-            if ($seasonEpisodes[$k]['Watched'] != WATCHED)
-            {
-                $bg_color = "UnwatchedRow";
-            }
+            $watched_str = ($seasonEpisodes[$k]['Watched'] != WATCHED) ? "Unwatched" : "Watched";
 
-            $template .= '<tr id="' .$bg_color . "\""  . '>
+            $template .= '<tr>
                              <td class="CenterAlignTd">'   . $seasonEpisodes[$k]['OverAll']   . '</td>
                              <td class="CenterAlignTd">'   . $seasonEpisodes[$k]['EpisodeNo'] . '</td>
                              <td class="LeftAlignTd">'     . $seasonEpisodes[$k]['Title']     . '</td>
-                             <td class="CenterAlignTd">'   . $seasonEpisodes[$k]['Date']      . '</td>
-                          </tr>';
+                             <td class="CenterAlignTd">'   . $seasonEpisodes[$k]['Date']      . '</td>';
+
+            if ($watched_str == "Watched") {
+                $template .= '<form action="" method="post">
+                                 <td class="CenterAlignTd">
+                                 <input type="button" value=' . $watched_str . ' id="' . $seasonEpisodes[$k]['OverAll'] . '" name="' . $thisSeason . '" class="WatchedRow">
+                                 </td>
+                             </form>';
+            }
+            else {
+                $template .= '<form action="" method="post">
+                                 <td class="CenterAlignTd">
+                                 <input type="button" value=' . $watched_str . ' id="' . $seasonEpisodes[$k]['OverAll'] . '" name="' . $thisSeason . '" class="UnwatchedRow">
+                                 </td>
+                             </form>';
+            }
+
+            $template .= '</tr>';
         }
 
         $template .= "</table>";

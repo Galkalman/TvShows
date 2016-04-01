@@ -59,7 +59,9 @@ switch($routing){
         $output = $form->editorHandler();
         break;
     default:
-        $output = "Create homepage";
+        $match = array();
+        $res = preg_match_all("(\/" . $routing . "\/)", URI_LIST, $match);
+        $output = ($res) ? $table->TvShow($routing) : "Create homepage";
 }
 
 # Footer:

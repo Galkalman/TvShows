@@ -56,6 +56,28 @@ th, td{
     padding: 3px;
 }
 
+.WatchedRow{
+    background-color: #4CAF50; /* Green */
+    border: none;
+    color: white;
+    padding: 7px 16px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 12px;
+}
+
+.UnwatchedRow{
+    background-color: rgb(237,67,55); /* Red */
+    border: none;
+    color: white;
+    padding: 7px 16px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 12px;
+}
+
 /* Header ID's*/
 
 #Header{
@@ -143,14 +165,6 @@ th, td{
 #SubmitForm{
     padding-left: 20%;
     padding-top: 5%;
-}
-
-#WatchedRow{
-    background-color: limegreen;
-}
-
-#UnwatchedRow{
-    background-color: rgb(237,67,55);
 }
 
 /* Form ID's */

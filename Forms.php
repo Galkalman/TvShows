@@ -135,12 +135,7 @@ class Forms
 
     public function AddSeasonsForm($seasonsToAdd, $showKey)
     {
-        if (isset($_POST['titleToAddSeasonsTo'])) {
-            $title = $_POST['titleToAddSeasonsTo'];
-        }
-        else {
-            $title = $_POST['Title'];
-        }
+        $title = $this->DB->select("tvShows", array("ShowKey"=>$showKey), "Title")[0]["Title"];
 
         $template = '<div>
                         <form action="./AddSeason" method="post">

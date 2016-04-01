@@ -2,7 +2,7 @@
 #TODO: Remove some from URI_LIST, and some other unnecessary constants
 # -------------------- URI --------------------
 
-define("URI_LIST", "/AlltvShows/TheFlash/Arrow/test/Grimm/AddSeason/InsertEpisodes/EditTables");
+define("URI_LIST", "/AlltvShows/TheFlash/Arrow/test/Grimm/AddSeason/InsertEpisodes/EditTables/");
 define("REDIRECT_HOME", "Location: /TvShows/");
 
 # -------------------- DB --------------------
