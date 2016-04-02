@@ -150,7 +150,22 @@ class EditTable
 
     public function editTvsTable($editInfo, $tblName)
     {
-        return null;
+        $postKeys = array_keys($editInfo);
+
+        for ($i = 0; $i < count($postKeys); $i++) {
+            $postCell = $postKeys[$i];
+            if ($postCell != "sendEditedTable" and $postCell != "tblName") {
+                $row = explode("row", explode("col", $postCell)[0])[1];
+                $col = explode("col", $postCell)[1];
+
+                if ($col == "0") {
+                    $this->DB->update($tblName, "Status", $editInfo["row" . $row . "col3"], array("ShowKey" => $editInfo[$postCell]));
+                }
+
+            }
+        }
+
+        return 'Success.';
     }
 
     public function editSeriesTable($editInfo, $tblName)
@@ -181,11 +196,30 @@ class EditTable
             }
         }
 
-        return "Success.";
+        return 'Success.';
     }
 
     public function editSeasonTable($editInfo, $tblName)
     {
-        return null;
+        $postKeys = array_keys($editInfo);
+
+        for ($i = 0; $i < count($postKeys); $i++) {
+            $postCell = $postKeys[$i];
+            if ($postCell != "sendEditedTable" and $postCell != "tblName") {
+                $row = explode("row", explode("col", $postCell)[0])[1];
+                $col = explode("col", $postCell)[1];
+
+                if ($col == "0") {
+                    $this->DB->update($tblName, "Title", $editInfo["row" . $row . "col2"], array("OverAll" => $editInfo[$postCell]));
+                    $this->DB->update($tblName, "Date", $editInfo["row" . $row . "col3"], array("OverAll" => $editInfo[$postCell]));
+                    if ($editInfo["row" . $row . "col4"] == "Watched") { $watched = 1; }
+                    else { $watched = 0; }
+                    $this->DB->update($tblName, "Watched", $watched, array("OverAll" => $editInfo[$postCell]));
+                }
+
+            }
+        }
+
+        return 'Success.';
     }
 }

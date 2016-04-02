@@ -411,7 +411,6 @@ class Forms
 
         if (isset($_POST["sendEditedTable"]))
         {
-            # TODO: Remember to make the change in the watched column. If it's watched send it as 1, else as 0.
             # TODO: type="date" data-date-inline-picker="true" -> Add this to every date input in the website
             $err = $this->EditTable->insertEditToDB($_POST);
         }
