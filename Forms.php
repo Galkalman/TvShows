@@ -168,7 +168,7 @@ class Forms
                                 Date Started:
                             </td>
                             <td class="FormTableTd">
-                                <input type="text" name="DateAired' . ($i + $seasonsNumberInTable) . '">
+                                <input type="date" data-date-inline-picker="true" name="DateAired' . ($i + $seasonsNumberInTable) . '">
                             </td>
                         </tr>
                         <tr>
@@ -176,7 +176,7 @@ class Forms
                                 Date Finished:
                             </td>
                             <td class="FormTableTd">
-                                <input type="text" name="DateFinished' . ($i + $seasonsNumberInTable) . '" value="TBA">
+                                <input type="date" data-date-inline-picker="true" name="DateFinished' . ($i + $seasonsNumberInTable) . '" value="1990-01-01">
                             </td>
                         </tr>';
         }
@@ -288,7 +288,7 @@ class Forms
                                 <input type="text" name="Title' . ($i + $episodesAlreadyInTable) . '" value="TBA">
                             </td>
                             <td class="FormTableTd">
-                                <input type="text" name="Date' . ($i + $episodesAlreadyInTable) . '" value="TBA">
+                                <input type="date" data-date-inline-picker="true" name="Date' . ($i + $episodesAlreadyInTable) . '" value="1990-01-01">
                             </td>
                             <td class="FormTableTd">
                                 <input type="radio" name="Watched' . ($i + $episodesAlreadyInTable) . '" value="0" checked> Unwatched
@@ -357,6 +357,13 @@ class Forms
         $error = $this->errorHandler($alert);
 
         if (isset($_POST['AddSeason'])) {
+            $postKeys = array_keys($_POST);
+            for ($i = 0; $i < count($postKeys); $i++) {
+                $cellName = $postKeys[$i];
+                if (strpos($cellName, "Date") !== false) {
+                    $this->changeDateFormat($cellName);
+                }
+            }
             $this->CreateSeries->AddRowToInfoTable(intval($_POST['seasonsToAdd']), $_POST['showKey']);
             header("Location: /tvShows");
         }
@@ -384,6 +391,13 @@ class Forms
         $error = $this->errorHandler($alert);
 
         if (isset($_POST['AddEpisodes'])) {
+            $postKeys = array_keys($_POST);
+            for ($i = 0; $i < count($postKeys); $i++) {
+                $cellName = $postKeys[$i];
+                if (strpos($cellName, "Date") !== false) {
+                    $this->changeDateFormat($cellName);
+                }
+            }
             $this->CreateSeries->AddEpisodeToSeasonTable($_POST['showKey'], intval($_POST['seasonNumberToAddTo']), intval($_POST['numberOfEpisodes']));
             header("Location: /tvShows");
         }
@@ -468,5 +482,22 @@ class Forms
         }
 
         return $lastSeasonOverAll;
+    }
+
+    private function changeDateFormat($cellName)
+    {
+        $date = $_POST[$cellName];
+        $date = explode("-", $date);
+        $last = count($date) - 1;
+        for ($i = 0; $i < count($date) / 2; $i++)
+        {
+            $tmp = $date[$i];
+            $date[$i] = $date[$last];
+            $date[$last] = $tmp;
+            $last = $last - 1;
+        }
+        $date = implode("-", $date);
+        if ($date == "01-01-1990") { $_POST[$cellName] = "TBA"; }
+        else { $_POST[$cellName] = $date; }
     }
 }
