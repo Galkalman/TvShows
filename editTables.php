@@ -12,7 +12,7 @@ class EditTable
         $this->DB = $db;
     }
 
-    public function ShowTableToEdit($tblName)
+    public function ShowTableToEdit($tblName, $err)
     {
         $res = $this->DB->select($tblName);
 
@@ -47,6 +47,7 @@ class EditTable
                                     </td>
                                 </tr>
                             </table>
+                            <input type="hidden" name="tblName" value="' . $tblName . '">
                         </form>
                      </div>
                      <script type="text/javascript">
@@ -63,7 +64,7 @@ class EditTable
                         }
                      </script>';
 
-        return $template;
+        return $template . "<div class=\"Error\"><p>" . $err . "</p></div>";
     }
 
     private function findTableType($tblName)
@@ -120,6 +121,7 @@ class EditTable
 
     private function returnOptions($value)
     {
+        # TODO: Improve this with split and regex
         if ($value == '2') {
             return '<option value="1">' . RUNNING . '</option>
                     <option value="2" selected="selected">' . WINTER . '</option>
@@ -133,5 +135,57 @@ class EditTable
                     <option value="2">' . WINTER . '</option>
                     <option value="3">' . FINISHED . '</option>';
         }
+    }
+
+    public function insertEditToDB($editInfo)
+    {
+        $tblName = $editInfo["tblName"];
+        $tblType = $this->findTableType($tblName);
+
+        if ($tblType == TVS_TABLE) { return $this->editTvsTable($editInfo, $tblName); }
+        elseif ($tblType == SERIES_TABLE) { return $this->editSeriesTable($editInfo, $tblName); }
+        elseif ($tblType == SEASON_TABLE) { return $this->editSeasonTable($editInfo, $tblName); }
+        else { return "Should Never Happen :)"; }
+    }
+
+    public function editTvsTable($editInfo, $tblName)
+    {
+        return null;
+    }
+
+    public function editSeriesTable($editInfo, $tblName)
+    {
+        $postKeys = array_keys($editInfo);
+
+        for ($i = 0; $i < count($postKeys); $i++)
+        {
+            $postCell = $postKeys[$i];
+            if ($postCell != "sendEditedTable" and $postCell != "tblName") {
+                $row = explode("row", explode("col", $postCell)[0])[1];
+                $col = explode("col", $postCell)[1];
+
+                if ($col == "0")
+                {
+                    if (count($this->DB->select($tblName . "S" . str_pad($editInfo[$postCell], 2, "0", STR_PAD_LEFT))) < intval($editInfo["row" . $row . "col1"])) {
+                        $this->DB->update($tblName, "NoEpisodes", $editInfo["row" . $row . "col1"], array("SeasonNo" => $editInfo[$postCell]));
+                        $this->DB->update($tblName, "DateAired", $editInfo["row" . $row . "col2"], array("SeasonNo" => $editInfo[$postCell]));
+                        $this->DB->update($tblName, "DateFinished", $editInfo["row" . $row . "col3"], array("SeasonNo" => $editInfo[$postCell]));
+                    }
+                    else {
+                        $_POST["editTable"] = true;
+                        $_POST["tableToEdit"] = $tblName;
+                        return "There are more episodes in the table then in the change you've made.";
+                    }
+                }
+
+            }
+        }
+
+        return "Success.";
+    }
+
+    public function editSeasonTable($editInfo, $tblName)
+    {
+        return null;
     }
 }

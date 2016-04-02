@@ -316,7 +316,7 @@ class Forms
         return $template;
     }
 
-    public function editTable()
+    public function editTable($err)
     {
         $allShows = $this->DB->select("INFORMATION_SCHEMA.TABLES", array("TABLE_SCHEMA"=>"TVShowsSite"), "TABLE_NAME");
 
@@ -349,7 +349,7 @@ class Forms
                         </form>
                      </div>';
 
-        return $template;
+        return $template . "<div class='Success'><p>" . $err . "</p></div";
     }
 
     public function seasonsHandler($alert)
@@ -407,21 +407,22 @@ class Forms
 
     public function editorHandler()
     {
+        $err = "";
+
         if (isset($_POST["sendEditedTable"]))
         {
             # TODO: Remember to make the change in the watched column. If it's watched send it as 1, else as 0.
             # TODO: type="date" data-date-inline-picker="true" -> Add this to every date input in the website
-            print_r($_POST);
-            return "Need to do the update to table";
+            $err = $this->EditTable->insertEditToDB($_POST);
         }
 
         if (isset($_POST["editTable"]))
         {
-            return $this->EditTable->ShowTableToEdit($_POST["tableToEdit"]);
+            return $this->EditTable->ShowTableToEdit($_POST["tableToEdit"], $err);
         }
 
         else {
-            return $this->editTable();
+            return $this->editTable($err);
         }
     }
 

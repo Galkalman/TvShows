@@ -200,7 +200,6 @@ class DB
         }
     }
 
-    # TODO: Crete the update function
     public function update($tblName, $colToUpdate, $valToUpdate, $params=array(0=>0))
     {
         # UPDATE `tvShows` SET `NoSeasons`='2'
