@@ -197,7 +197,38 @@ class Forms
     {
         $allShows = $this->DB->select("tvShows");
 
-        $template = '<div>
+        $template = "<script>
+                         $(function () {
+                             $('#showToAddEpisodesTo').change(function () {
+                                 var list = $(this);
+                                 var show = $(this).val();
+                                 $.ajax({url: './ajax.php', data: {seasonNumbersForShow: show}, type: 'post', async: false, success: function(data){
+                                    var output = '';
+                                    if (data == '0') {
+                                        output = '<option value=\'None\' selected> No Seasons </option>';
+                                    }
+                                    for (var i = 1; i <= data; i++)
+                                    {
+                                        output += '<option value=\"' + i + '\"> Season ' + i + '</option>'
+                                    }
+                                    $('#seasonToAddEpisodesTo').html(output);
+                                 }});
+                             });
+                         });
+                     </script>
+                     <script>
+                         $(document).ready(function() {
+                             $('#AddEpisodesForm').submit(function(event){
+                                var option = $('#seasonToAddEpisodesTo').val();
+                                if (option == 'None')
+                                {
+                                    event.preventDefault();
+                                }
+                             });
+                         });
+                     </script>";
+
+        $template .= '<div>
                         <form action="./InsertEpisodes" method="post" id="AddEpisodesForm">
                             <table id="FormTable">
                                 <tr>
@@ -205,7 +236,9 @@ class Forms
                                         <h4> Show Title </h4>
                                     </td>
                                     <td class="FormTableTd">
-                                        <select name="showToAddEpisodesTo" form="AddEpisodesForm" required>';
+                                        <select name="showToAddEpisodesTo" id="showToAddEpisodesTo" form="AddEpisodesForm" required>';
+
+        $noSeasonsOfFirstShow = $this->DB->select($allShows[0]["ShowKey"]);
 
         for ($i = 0; $i < count($allShows); $i++)
         {
@@ -220,7 +253,18 @@ class Forms
                                 <h4> Season Number </h4>
                             </td>
                             <td class="FormTableTd">
-                                <input type="text" name="seasonToAddEpisodesTo">
+                                <select name="seasonToAddEpisodesTo" id="seasonToAddEpisodesTo" form="AddEpisodesForm" required>';
+
+        if ($noSeasonsOfFirstShow != "Nothing found.") {
+            for ($i = 1; $i <= count($noSeasonsOfFirstShow); $i++) {
+                $template .= '<option value="' . $i . '">' . "Season " . $i . '</option>';
+            }
+        }
+        else {
+            $template .= '<option value="None" selected> No Seasons </option>';
+        }
+
+         $template .= '         </select>
                             </td>
                         </tr>
                         <tr>
@@ -377,6 +421,7 @@ class Forms
         {
             $seasonsToAdd = intval($_POST['NoSeasons']);
             $showKey = $_POST['ShowKey'];
+            $error = '<div class="Error"><p>' . $alert . '</p></div>';
             return $this->AddSeasonsForm($seasonsToAdd, $showKey) . $error;
         }
 
@@ -425,7 +470,6 @@ class Forms
 
         if (isset($_POST["sendEditedTable"]))
         {
-            # TODO: type="date" data-date-inline-picker="true" -> Add this to every date input in the website
             $err = $this->EditTable->insertEditToDB($_POST);
         }
 

@@ -23,7 +23,7 @@ class CreateTvShow
             $formData = array('Title' => $_POST['Title'], 'ShowKey' => $_POST['ShowKey'], 'NoSeasons' => $_POST['NoSeasons'], 'Status' => $_POST['Status']);
 
             $res = $this->DB->select('tvShows', array('ShowKey' => $_POST['ShowKey']));
-            $this->alert = "This show already exists.";
+            $this->alert = "This show already exists. But you can add the seasons following the last one inserted.";
             if (!count($res)) {
                 $res = $this->DB->insert('tvShows', $formData);
                 $this->alert = SUCCESSFUL_INSERT;
