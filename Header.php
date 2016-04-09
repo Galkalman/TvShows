@@ -11,17 +11,8 @@ class Header
                 <a href="' . URI_ALL_TVSHOWS . '" class="HeaderText">
                     <h2 class="HeaderText" id="TvShowsHeader"> TV Shows </h2>
                 </a>
-                <a href="' . TESTING . '" class="HeaderText">
-                    <h2 class="HeaderText" id="TestHeader"> Testing Zone </h2>
-                </a>
-                <a href="' . URI_ADD_SEASON . '" class="HeaderText">
-                    <h2 class="HeaderText" id="AddSeasons"> Add Seasons </h2>
-                </a>
-                <a href="' . URI_INSERT_EPISODES . '" class="HeaderText">
-                    <h2 class="HeaderText" id="AddEpisodes"> Insert Episodes </h2>
-                </a>
-                <a href="' . URI_EDIT_TABLES . '" class="HeaderText">
-                    <h2 class="HeaderText" id="EditTables"> Edit Tables </h2>
+                <a href="' . URI_EDITOR . '" class="HeaderText">
+                    <h2 class="HeaderText" id="EditPage"> Editor </h2>
                 </a>';
     }
 

@@ -36,17 +36,10 @@ switch($routing){
     case URI_ALL_TVSHOWS:
         $output = $table->AllTvShowsTable();
         break;
-    case THE_FLASH:
-        $output = $table->TvShow(THE_FLASH);
+    case URI_EDITOR:
+        $output = $form->editor();
         break;
-    case ARROW:
-        $output = $table->TvShow(ARROW);
-        break;
-    case GRIMM:
-        $output = $table->TvShow(GRIMM);
-        break;
-    case TESTING:
-        # TODO: Remove this after finishing tests
+    case URI_ADD_SHOW:
         $output = $form->CreateSeriesForm($createSeries->alert);
         break;
     case URI_ADD_SEASON:
@@ -59,9 +52,20 @@ switch($routing){
         $output = $form->editorHandler();
         break;
     default:
-        $match = array();
-        $res = preg_match_all("(\/" . $routing . "\/)", URI_LIST, $match);
-        $output = ($res) ? $table->TvShow($routing) : "Create homepage";
+        $allShows = $DB->select("tvShows", array(0=>0), "ShowKey");
+
+        $output = "Create homepage";
+
+        for ($i = 0; $i < count($allShows); $i++)
+        {
+            if (in_array($routing, $allShows[$i]))
+            {
+                $output = $table->TvShow($routing);
+                break;
+            }
+        }
+
+        break;
 }
 
 # Footer:

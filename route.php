@@ -22,6 +22,6 @@ class Route
                 return $value;
             }
         }
-        return null;
+        return $uriGetParam;
     }
 }

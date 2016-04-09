@@ -396,6 +396,30 @@ class Forms
         return $template . "<div class='Success'><p>" . $err . "</p></div";
     }
 
+    public function editor()
+    {
+        $template = '<div>
+                        <table id="FormTable">
+                            <tr>
+                                <td class="FormTableTd">
+                                    <a href="' . URI_ADD_SHOW . '" id="showEditor">Add New Show</a>
+                                </td>
+                                <td class="FormTableTd">
+                                    <a href="' . URI_ADD_SEASON . '" id="seasonEditor">Add New Season</a>
+                                </td>
+                                <td class="FormTableTd">
+                                    <a href="' . URI_INSERT_EPISODES . '" id="episodesEditor">Add New Episodes</a>
+                                </td>
+                                <td class="FormTableTd">
+                                    <a href="' . URI_EDIT_TABLES . '" id="editingEditor">Edit Tables</a>
+                                </td>
+                            </tr>
+                        </table>
+                     </div>';
+
+        return $template;
+    }
+
     public function seasonsHandler($alert)
     {
         $error = $this->errorHandler($alert);

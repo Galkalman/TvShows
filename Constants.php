@@ -2,7 +2,7 @@
 #TODO: Remove some from URI_LIST, and some other unnecessary constants
 # -------------------- URI --------------------
 
-define("URI_LIST", "/AlltvShows/TheFlash/Arrow/test/Grimm/AddSeason/InsertEpisodes/EditTables/");
+define("URI_LIST", "/AlltvShows/AddShow/AddSeason/InsertEpisodes/EditTables/Editor/");
 define("REDIRECT_HOME", "Location: /TvShows/");
 
 # -------------------- DB --------------------
@@ -19,7 +19,8 @@ define("URI_ALL_TVSHOWS", "AlltvShows");
 define("URI_ADD_SEASON", "AddSeason");
 define("URI_INSERT_EPISODES", "InsertEpisodes");
 define("URI_EDIT_TABLES", "EditTables");
-
+define("URI_ADD_SHOW", "AddShow");
+define("URI_EDITOR", "Editor");
 
 # -------------------- TvShow Status --------------------
 
@@ -27,16 +28,9 @@ define("FINISHED", "Finished 😭");
 define("WINTER", "Winter Break");
 define("RUNNING", "Running");
 
-# -------------------- Shows --------------------
-
-define("ARROW", "Arrow");
-define("GRIMM", "Grimm");
-define("THE_FLASH", "TheFlash");
-
 # -------------------- Basics --------------------
 
 define("WATCHED", 1);
-define("TESTING", "test");
 
 # -------------------- Tables --------------------
 

@@ -52,7 +52,7 @@ th, td{
 }
 
 .FormTableTd{
-    border: 0px;
+    border: 0;
     padding: 3px;
 }
 
@@ -107,7 +107,7 @@ th, td{
     left: 10%;
 }
 
-#AddSeasons{
+#EditPage{
     left: 20%;
 }
 
@@ -128,6 +128,60 @@ th, td{
     width: 90%;
 }
 
+/* Editor ID's */
+
+#showEditor:link, #showEditor:visited {
+    background-color: #f44336;
+    color: white;
+    padding: 14px 25px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+}
+
+#showEditor:hover, #showEditor:active {
+    background-color: red;
+}
+
+#seasonEditor:link, #seasonEditor:visited {
+    background-color: forestgreen;
+    color: white;
+    padding: 14px 25px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+}
+
+#seasonEditor:hover, #seasonEditor:active {
+    background-color: green;
+}
+
+#episodesEditor:link, #episodesEditor:visited {
+    background-color: royalblue;
+    color: white;
+    padding: 14px 25px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+}
+
+#episodesEditor:hover, #episodesEditor:active {
+    background-color: blue;
+}
+
+#editingEditor:link, #editingEditor:visited {
+    background-color: orange;
+    color: white;
+    padding: 14px 25px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+}
+
+#editingEditor:hover, #editingEditor:active {
+    background-color: darkorange;
+}
+
 /* Footer ID's*/
 
 #Footer
@@ -140,14 +194,6 @@ th, td{
     background-color: rgba(0, 0, 0, 0.8);
 }
 
-/*
-#Form{
-    top: 60%;
-    position: absolute;
-    left: 10%;
-}
-*/
-
 /* Table ID's*/
 
 #HeadLine{
@@ -155,7 +201,7 @@ th, td{
 }
 
 #FormTable{
-    border: 0px;
+    border: 0;
     position: inherit;
     left: 35%;
     top: 25%;
